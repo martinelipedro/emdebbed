@@ -8,7 +8,7 @@ CLEAN_TARGETS = $(OBJECTS) $(EXE_NAME)
 .PHONY: all clean
 
 all: $(OBJECTS) $(HEADERS)
-	gcc $(OBJECTS) -o $(EXE_NAME)
+	gcc -O2 $(OBJECTS) -o $(EXE_NAME)
 
 all-exe: all
 	rm -rf $(OBJECTS)
@@ -17,4 +17,4 @@ clean:
 	rm -rf $(CLEAN_TARGETS)
 
 %.o: %.c
-	gcc -c $< -o $@
+	gcc -O2 -c $< -o $@
