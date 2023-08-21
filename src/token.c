@@ -23,5 +23,5 @@ const char* token_get_string_repr(token_T* token)
 
 void token_print_repr_to_terminal(token_T* token)
 {
-
+    printf("%s", token_get_string_repr(token));
 }
