@@ -16,8 +16,8 @@ token_T* init_token(int type, char* value)
 
 const char* token_get_string_repr(token_T* token)
 {
-    char* buffer = malloc((strlen(token->value) + strlen("( : )") + 3) * sizeof(char));
-    (void)!sprintf(buffer, "(%d: %s)", token->type, token->value);
+    char* buffer = malloc((strlen(token->value) + strlen("( : )") + 4) * sizeof(char));
+    (void)!sprintf(buffer, "(%d: %s)\n", token->type, token->value);
     return buffer;
 }
 
