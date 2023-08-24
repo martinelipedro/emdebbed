@@ -1,7 +1,16 @@
 #ifndef EMDEBBED_TOKEN_H
 #define EMDEBBED_TOKEN_H
 
-typedef struct STRUCT_TYPE___TOKEN
+enum ENUM__TOKEN_TYPE
+{
+    TOK_EOF = -1,
+    TOK_ID,
+    TOK_EQUALS,
+    TOK_STRING,
+    TOK_SEMICOLON,
+};
+
+typedef struct STRUCT_TYPE__TOKEN
 {
     int type;
     char* value;

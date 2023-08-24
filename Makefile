@@ -10,7 +10,7 @@ CLEAN_TARGETS = $(OBJECTS) $(EXE_NAME)
 all: $(OBJECTS) $(HEADERS)
 	gcc -O2 $(OBJECTS) -o $(EXE_NAME)
 
-all-exe: all
+exe: all
 	rm -rf $(OBJECTS)
 
 clean:
