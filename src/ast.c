@@ -36,8 +36,22 @@ ast_T* init_ast(int type)
         case AST_VARIABLE:
         {
             ast->value.variable = malloc(sizeof(ast_variable_T));
-            ast->value.variable->name = malloc(ID_MAX_SIZE * sizeof(char));
+            ast->value.variable->name = calloc(ID_MAX_SIZE, sizeof(char));
             break;
+        }
+        case AST_INTEGER:
+        {
+            ast->value.integer = malloc(sizeof(ast_int_T));
+            ast->value.integer->literal = calloc(10, sizeof(char));
+            ast->value.integer->value = 0;
+            break;
+        }
+        case AST_BINARY_EXPR:
+        {
+            ast->value.binary_expr = malloc(sizeof(ast_bin_expr_T));
+            ast->value.binary_expr->lhs = (void*)0;
+            ast->value.binary_expr->lhs = (void*)0;
+            ast->value.binary_expr->operator = -1;
         }
     }
 

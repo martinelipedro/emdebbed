@@ -13,6 +13,8 @@ enum ENUM__AST_TYPE
     AST_VARIABLE,
     AST_FUNCTION_CALL,
     AST_STRING,
+    AST_INTEGER,
+    AST_BINARY_EXPR,
 };
 
 typedef vector_T ast_compound_T;
@@ -35,6 +37,21 @@ typedef struct STRUCT_TYPE__AST_TYPE__VARIABLE
     char* name;
 } ast_variable_T;
 
+typedef struct STRUCT_TYPE__AST_TYPE__INTEGER
+{
+    char* literal;
+    int value;
+
+} ast_int_T;
+
+typedef struct STRUCT_TYPE__AST_TYPE_BINARY_EXPR
+{
+    struct STRUCT_TYPE__AST* lhs;
+    struct STRUCT_TYPE__AST* rhs;
+    int operator;
+
+} ast_bin_expr_T;
+
 typedef struct STRUCT_TYPE__AST
 {
     int type;
@@ -43,8 +60,10 @@ typedef struct STRUCT_TYPE__AST
         ast_compound_T* compound;
         ast_variable_definition_T* variable_definition;
         ast_function_call_T* function_call;
-        char* string;
+        ast_string_T* string;
         ast_variable_T* variable;
+        ast_int_T* integer;
+        ast_bin_expr_T* binary_expr;
     } value;
 
 } ast_T;

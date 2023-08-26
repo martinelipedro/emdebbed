@@ -11,6 +11,11 @@ enum ENUM__TOKEN_TYPE
     TOK_LPAREN,
     TOK_RPAREN,
     TOK_COMMA,
+    TOK_INT,
+    TOK_STAR,
+    TOK_SLASH,
+    TOK_PLUS,
+    TOK_MINUS,
 };
 
 typedef struct STRUCT_TYPE__TOKEN

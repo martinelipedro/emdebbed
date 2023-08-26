@@ -18,6 +18,7 @@ void lexer_advance(lexer_T* lexer);
 token_T* lexer_get_next_token(lexer_T* lexer);
 token_T* lexer_collect_id(lexer_T* lexer);
 token_T* lexer_collect_string(lexer_T* lexer);
+token_T* lexer_collect_number(lexer_T* lexer);
 
 
 #endif

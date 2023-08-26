@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include "include/token.h"
 
 void builtin_print(visitor_T* visitor, ast_compound_T* arguments)
 {
@@ -12,6 +13,7 @@ void builtin_print(visitor_T* visitor, ast_compound_T* arguments)
         switch (node->type)
         {
             case AST_STRING: printf("%s\n", node->value.string); break;
+            case AST_INTEGER: printf("%d\n", node->value.integer->value); break;
         }
     }
 }
@@ -34,6 +36,8 @@ ast_T* visitor_visit(visitor_T* visitor, ast_T* node)
         case AST_FUNCTION_CALL: return visitor_visit_function_call(visitor, node);
         case AST_VARIABLE_DEFINITION: return visitor_visit_variable_definition(visitor, node);
         case AST_VARIABLE: return visitor_visit_variable(visitor, node);
+        case AST_BINARY_EXPR: return visitor_visit_binary_expr(visitor, node);
+        case AST_INTEGER: return visitor_visit_integer(visitor, node);
         case AST_NOOP: return node;
     }
 }
@@ -76,4 +80,56 @@ ast_T* visitor_visit_variable_definition(visitor_T* visitor, ast_T* node)
 ast_T* visitor_visit_variable(visitor_T* visitor, ast_T* node)
 {
     return visitor_visit(visitor, context_get_variable(visitor->global_context, node->value.variable->name));
+}
+
+ast_T* visitor_visit_integer(visitor_T* visitor, ast_T* node)
+{
+    return node;
+}
+
+ast_T* visitor_visit_binary_expr(visitor_T* visitor, ast_T* node)
+{
+    switch (node->value.binary_expr->operator)
+    {
+        case TOK_PLUS:
+        {
+            ast_T* result = init_ast(AST_INTEGER);
+            result->value.integer->value = 
+                visitor_visit(visitor, node->value.binary_expr->lhs)->value.integer->value + \
+                visitor_visit(visitor, node->value.binary_expr->rhs)->value.integer->value;
+            
+            return result;
+            break;
+        }
+        case TOK_MINUS:
+        {
+            ast_T* result = init_ast(AST_INTEGER);
+            result->value.integer->value = 
+                visitor_visit(visitor, node->value.binary_expr->lhs)->value.integer->value - \
+                visitor_visit(visitor, node->value.binary_expr->rhs)->value.integer->value;
+            
+            return result;
+            break;
+        }
+        case TOK_STAR:
+        {
+            ast_T* result = init_ast(AST_INTEGER);
+            result->value.integer->value = 
+                visitor_visit(visitor, node->value.binary_expr->lhs)->value.integer->value * \
+                visitor_visit(visitor, node->value.binary_expr->rhs)->value.integer->value;
+            
+            return result;
+            break;
+        }
+        case TOK_SLASH:
+        {
+            ast_T* result = init_ast(AST_INTEGER);
+            result->value.integer->value = 
+                visitor_visit(visitor, node->value.binary_expr->lhs)->value.integer->value / \
+                visitor_visit(visitor, node->value.binary_expr->rhs)->value.integer->value;
+            
+            return result;
+            break;
+        }
+    }
 }

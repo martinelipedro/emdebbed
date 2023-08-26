@@ -1,2 +1,5 @@
-var = "string";
-print(var);
+var = 9 * 9;
+
+othervar = var - 9;
+
+print(othervar);

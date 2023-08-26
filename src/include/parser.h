@@ -25,4 +25,10 @@ ast_T* parser_parse_function_call(parser_T* parser);
 ast_T* parser_parse_string(parser_T* parser);
 ast_T* parser_parse_variable(parser_T* parser);
 
+ast_T* parser_parse_expr(parser_T* parser);
+
+ast_T* parser_parse_arith_expr(parser_T* parser);
+ast_T* parser_parse_term(parser_T* parser);
+ast_T* parser_parse_factor(parser_T* parser);
+
 #endif

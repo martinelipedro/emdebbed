@@ -35,6 +35,9 @@ token_T* lexer_get_next_token(lexer_T* lexer)
 
     if (isalpha(lexer->current_char))
         return lexer_collect_id(lexer);
+    
+    if (isdigit(lexer->current_char))
+        return lexer_collect_number(lexer);
 
 
     switch (lexer->current_char)
@@ -45,6 +48,12 @@ token_T* lexer_get_next_token(lexer_T* lexer)
         case '(': lexer_advance(lexer); return init_token(TOK_LPAREN, "(");
         case ')': lexer_advance(lexer); return init_token(TOK_RPAREN, ")");
         case ',': lexer_advance(lexer); return init_token(TOK_COMMA, ",");
+        case '*': lexer_advance(lexer); return init_token(TOK_STAR, "*");
+        case '/': lexer_advance(lexer); return init_token(TOK_SLASH, "/");
+        case '+': lexer_advance(lexer); return init_token(TOK_PLUS, "+");
+        case '-': lexer_advance(lexer); return init_token(TOK_MINUS, "-");
+
+
         default: return init_token(TOK_EOF, 0);
     }
 }
@@ -77,4 +86,18 @@ token_T* lexer_collect_string(lexer_T* lexer)
     lexer_advance(lexer);
 
     return init_token(TOK_STRING, buffer);
+}
+
+token_T* lexer_collect_number(lexer_T* lexer)
+{
+    char* buffer = calloc(1, sizeof(char));
+
+    while (isdigit(lexer->current_char))
+    {
+        buffer = realloc(buffer, (strlen(buffer) + 2) * sizeof(char));
+        strcat(buffer, (char[]){lexer->current_char, 0});
+        lexer_advance(lexer);
+    }
+
+    return init_token(TOK_INT, buffer);
 }
