@@ -43,7 +43,16 @@ token_T* lexer_get_next_token(lexer_T* lexer)
     switch (lexer->current_char)
     {
         case '"': return lexer_collect_string(lexer); 
-        case '=': lexer_advance(lexer); return init_token(TOK_EQUALS, "=");
+        case '=':
+        {
+            lexer_advance(lexer);
+            if (lexer->current_char == '=')
+            {
+                lexer_advance(lexer);
+                return init_token(TOK_EQUALS_EQUALS, "==");
+            }
+            return init_token(TOK_EQUALS, "=");
+        }
         case ';': lexer_advance(lexer); return init_token(TOK_SEMICOLON, ";");
         case '(': lexer_advance(lexer); return init_token(TOK_LPAREN, "(");
         case ')': lexer_advance(lexer); return init_token(TOK_RPAREN, ")");
@@ -52,6 +61,9 @@ token_T* lexer_get_next_token(lexer_T* lexer)
         case '/': lexer_advance(lexer); return init_token(TOK_SLASH, "/");
         case '+': lexer_advance(lexer); return init_token(TOK_PLUS, "+");
         case '-': lexer_advance(lexer); return init_token(TOK_MINUS, "-");
+        case '>': lexer_advance(lexer); return init_token(TOK_GREATER, ">");
+        case '<': lexer_advance(lexer); return init_token(TOK_LESSER, "<");
+
 
 
         default: return init_token(TOK_EOF, 0);

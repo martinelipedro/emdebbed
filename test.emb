@@ -1,5 +1,3 @@
-var = 9 * 9;
+var = 12;
 
-othervar = var - 9;
-
-print(othervar);
+print(var == 12);

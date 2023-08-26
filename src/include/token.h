@@ -16,6 +16,9 @@ enum ENUM__TOKEN_TYPE
     TOK_SLASH,
     TOK_PLUS,
     TOK_MINUS,
+    TOK_GREATER,
+    TOK_LESSER,
+    TOK_EQUALS_EQUALS,
 };
 
 typedef struct STRUCT_TYPE__TOKEN

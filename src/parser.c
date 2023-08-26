@@ -60,7 +60,7 @@ ast_T* parser_parse_statements(parser_T* parser)
     {
         case TOK_ID: return parser_parse_id(parser); break;
         case TOK_STRING: return parser_parse_string(parser); break;
-        case TOK_INT: return parser_parse_arith_expr(parser); break;
+        case TOK_INT: return parser_parse_expr(parser); break;
     }
 
     return init_ast(AST_NOOP);
@@ -74,7 +74,7 @@ ast_T* parser_parse_id(parser_T* parser)
     {
         case TOK_EQUALS: return parser_parse_variable_definition(parser);
         case TOK_LPAREN: return parser_parse_function_call(parser);
-        default: return parser_parse_arith_expr(parser);
+        default: return parser_parse_expr(parser);
     }
 }
 
@@ -136,7 +136,34 @@ ast_T* parser_parse_variable(parser_T* parser)
 
 ast_T* parser_parse_expr(parser_T* parser)
 {
+    ast_T* left, *right;
+    left = parser_parse_arith_expr(parser);
 
+
+    token_T* token = parser->current_token;
+
+
+    if (token->type == TOK_SEMICOLON || token->type == TOK_RPAREN)
+    {
+        return left;
+    }
+    
+    while (token->type == TOK_GREATER || token->type == TOK_LESSER || TOK_EQUALS_EQUALS)
+    {
+        parser_advance(parser);
+
+        right = parser_parse_arith_expr(parser);
+        ast_T* new_left = init_ast(AST_BINARY_EXPR);
+        new_left->value.binary_expr->lhs = left;
+        new_left->value.binary_expr->rhs = right;
+        new_left->value.binary_expr->operator = token->type;
+        left = new_left;
+
+        token = parser->current_token;
+        if (token->type == TOK_SEMICOLON || token->type == TOK_RPAREN) break;
+    }
+
+    return left;
 }
 
 ast_T* parser_parse_arith_expr(parser_T* parser)
@@ -172,8 +199,12 @@ ast_T* parser_parse_arith_expr(parser_T* parser)
 
 ast_T* parser_parse_term(parser_T* parser)
 {
+
+
     ast_T* left, *right;
     left = parser_parse_factor(parser);
+
+
 
     token_T* token = parser->current_token;
 
@@ -204,6 +235,7 @@ ast_T* parser_parse_term(parser_T* parser)
 ast_T* parser_parse_factor(parser_T* parser)
 {
     token_T* token = parser->current_token;
+
 
 
     switch (token->type)
