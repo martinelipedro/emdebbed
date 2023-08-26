@@ -51,7 +51,7 @@ token_T* lexer_get_next_token(lexer_T* lexer)
 
 token_T* lexer_collect_id(lexer_T* lexer)
 {
-    char* buffer = malloc(sizeof(char));
+    char* buffer = calloc(1, sizeof(char));
 
     while (isalpha(lexer->current_char))
     {
@@ -65,7 +65,7 @@ token_T* lexer_collect_id(lexer_T* lexer)
 
 token_T* lexer_collect_string(lexer_T* lexer)
 {
-    char* buffer = malloc(sizeof(char));
+    char* buffer = calloc(1, sizeof(char));
 
     lexer_advance(lexer);
     while (lexer->current_char != '"')

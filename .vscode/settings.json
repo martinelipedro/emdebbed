@@ -7,6 +7,8 @@
         "tuple": "c",
         "type_traits": "c",
         "utility": "c",
-        "context.h": "c"
+        "context.h": "c",
+        "file.h": "c",
+        "visitor.h": "c"
     }
 }
