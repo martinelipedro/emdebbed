@@ -42,6 +42,10 @@ token_T* lexer_get_next_token(lexer_T* lexer)
         case '"': return lexer_collect_string(lexer); 
         case '=': lexer_advance(lexer); return init_token(TOK_EQUALS, "=");
         case ';': lexer_advance(lexer); return init_token(TOK_SEMICOLON, ";");
+        case '(': lexer_advance(lexer); return init_token(TOK_LPAREN, "(");
+        case ')': lexer_advance(lexer); return init_token(TOK_RPAREN, ")");
+        case ',': lexer_advance(lexer); return init_token(TOK_COMMA, ",");
+        default: return init_token(TOK_EOF, 0);
     }
 }
 
@@ -64,7 +68,7 @@ token_T* lexer_collect_string(lexer_T* lexer)
     char* buffer = malloc(sizeof(char));
 
     lexer_advance(lexer);
-    while (lexer->current_char !='"')
+    while (lexer->current_char != '"')
     {
         buffer = realloc(buffer, (strlen(buffer) + 2) * sizeof(char));
         strcat(buffer, (char[]){lexer->current_char, 0});

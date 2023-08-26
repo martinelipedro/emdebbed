@@ -8,6 +8,9 @@ enum ENUM__TOKEN_TYPE
     TOK_EQUALS,
     TOK_STRING,
     TOK_SEMICOLON,
+    TOK_LPAREN,
+    TOK_RPAREN,
+    TOK_COMMA,
 };
 
 typedef struct STRUCT_TYPE__TOKEN

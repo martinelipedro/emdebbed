@@ -58,6 +58,8 @@ ast_T* parser_parse_statements(parser_T* parser)
         case TOK_ID: return parser_parse_id(parser); break;
         case TOK_STRING: return parser_parse_string(parser); break;
     }
+
+    return init_ast(AST_NOOP);
 }
 
 ast_T* parser_parse_id(parser_T* parser)
@@ -65,9 +67,12 @@ ast_T* parser_parse_id(parser_T* parser)
     parser_advance(parser);
 
 
-    if (parser->current_token->type == TOK_EQUALS)
+
+    switch (parser->current_token->type)
     {
-        return parser_parse_variable_definition(parser);
+        case TOK_EQUALS: return parser_parse_variable_definition(parser);
+        case TOK_LPAREN: return parser_parse_function_call(parser);
+        default: return init_ast(AST_NOOP);
     }
 }
 
@@ -85,11 +90,35 @@ ast_T* parser_parse_variable_definition(parser_T* parser)
     return ast;
 }
 
+ast_T* parser_parse_function_call(parser_T* parser)
+{
+    ast_T* ast = init_ast(AST_FUNCTION_CALL);
+    ast->value.function_call->name = parser->last_token->value;
+
+    parser_eat(parser, TOK_LPAREN);
+
+    if (parser->current_token->type == TOK_RPAREN)
+    {
+        parser_eat(parser, TOK_RPAREN);
+        return ast;
+    }
+
+    vector_push(ast->value.function_call->arguments, (void*)parser_parse_statements(parser));
+    while (parser->current_token->type == TOK_COMMA)
+    {
+        parser_eat(parser, TOK_COMMA);
+        vector_push(ast->value.function_call->arguments, (void*)parser_parse_statements(parser));
+    }
+    parser_eat(parser, TOK_RPAREN);
+    
+    return ast;
+}
+
 ast_T* parser_parse_string(parser_T* parser)
 {
     ast_T* ast = init_ast(AST_STRING);
 
-    strcpy(ast->value.string, parser->current_token->value);
+    ast->value.string = parser_eat(parser, TOK_STRING)->value;
 
     return ast;
 }

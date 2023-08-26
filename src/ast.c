@@ -23,7 +23,14 @@ ast_T* init_ast(int type)
         }
         case AST_STRING:
         {
-            ast->value.string = malloc(50 * sizeof(char));
+            ast->value.string = calloc(50, sizeof(char));
+            break;
+        }
+        case AST_FUNCTION_CALL:
+        {
+            ast->value.function_call = malloc(sizeof(ast_function_call_T));
+            ast->value.function_call->arguments = init_vector(sizeof(ast_T*));
+            ast->value.function_call->name = malloc(ID_MAX_SIZE * sizeof(char));
             break;
         }
     }

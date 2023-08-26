@@ -10,6 +10,7 @@ enum ENUM__AST_TYPE
     AST_NOOP,
     AST_COMPOUND,
     AST_VARIABLE_DEFINITION,
+    AST_FUNCTION_CALL,
     AST_STRING,
 };
 
@@ -22,6 +23,12 @@ typedef struct STRUCT_TYPE__AST_TYPE__VARIABLE_DEFINITION
 
 } ast_variable_definition_T;
 
+typedef struct ASTRUCT_TYPE__AST_TYPE__FUNCTION_CALL
+{
+    char* name;
+    ast_compound_T* arguments;
+} ast_function_call_T;
+
 typedef struct STRUCT_TYPE__AST
 {
     int type;
@@ -29,7 +36,8 @@ typedef struct STRUCT_TYPE__AST
     {
         ast_compound_T* compound;
         ast_variable_definition_T* variable_definition;
-        ast_string_T* string;
+        ast_function_call_T* function_call;
+        char* string;
     } value;
 
 } ast_T;
