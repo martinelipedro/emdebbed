@@ -3,48 +3,77 @@
 #include <string.h>
 #include <stdio.h>
 
-void builtin_print(ast_compound_T* arguments)
+void builtin_print(visitor_T* visitor, ast_compound_T* arguments)
 {
     for (int i = 0; i < arguments->len; ++i)
     {
-        printf("%s\n", ((ast_T*)(arguments->data[i]))->value.string);
+        ast_T* node = visitor_visit(visitor, ((ast_T*)arguments->data[i]));
+
+        switch (node->type)
+        {
+            case AST_STRING: printf("%s\n", node->value.string); break;
+        }
     }
 }
 
-ast_T* visitor_visit(ast_T* node)
+visitor_T* init_visitor()
+{
+    visitor_T* visitor = malloc(sizeof(visitor_T));
+
+    visitor->global_context = init_context();
+
+    return visitor;
+}
+
+ast_T* visitor_visit(visitor_T* visitor, ast_T* node)
 {
     switch (node->type)
     {
-        case AST_COMPOUND: return visitor_visit_compound(node);
-        case AST_STRING: return visitor_visit_string(node);
-        case AST_FUNCTION_CALL: return visitor_visit_function_call(node);
+        case AST_COMPOUND: return visitor_visit_compound(visitor, node);
+        case AST_STRING: return visitor_visit_string(visitor, node);
+        case AST_FUNCTION_CALL: return visitor_visit_function_call(visitor, node);
+        case AST_VARIABLE_DEFINITION: return visitor_visit_variable_definition(visitor, node);
+        case AST_VARIABLE: return visitor_visit_variable(visitor, node);
         case AST_NOOP: return node;
     }
 }
 
-ast_T* visitor_visit_compound(ast_T* node)
+ast_T* visitor_visit_compound(visitor_T* visitor, ast_T* node)
 {
     for (size_t i = 0; i < node->value.compound->len; ++i)
     {
-        visitor_visit(node->value.compound->data[i]);
+        visitor_visit(visitor, node->value.compound->data[i]);
     }
 
     return node;
 }
 
-ast_T* visitor_visit_string(ast_T* node)
+ast_T* visitor_visit_string(visitor_T* visitor, ast_T* node)
 {
-
+    return node;
 }
 
-ast_T* visitor_visit_function_call(ast_T* node)
+ast_T* visitor_visit_function_call(visitor_T* visitor, ast_T* node)
 {
 
 
     if (strcmp(node->value.function_call->name, "print") == 0)
     {
-        builtin_print(node->value.function_call->arguments);
+        builtin_print(visitor, node->value.function_call->arguments);
     }
     
     return node;
+}
+
+ast_T* visitor_visit_variable_definition(visitor_T* visitor, ast_T* node)
+{
+    context_set_variable(
+        visitor->global_context, node->value.variable_definition->name,
+        visitor_visit(visitor, node->value.variable_definition->value)
+    );
+}
+
+ast_T* visitor_visit_variable(visitor_T* visitor, ast_T* node)
+{
+    return visitor_visit(visitor, context_get_variable(visitor->global_context, node->value.variable->name));
 }

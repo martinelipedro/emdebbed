@@ -66,13 +66,11 @@ ast_T* parser_parse_id(parser_T* parser)
 {   
     parser_advance(parser);
 
-
-
     switch (parser->current_token->type)
     {
         case TOK_EQUALS: return parser_parse_variable_definition(parser);
         case TOK_LPAREN: return parser_parse_function_call(parser);
-        default: return init_ast(AST_NOOP);
+        default: return parser_parse_variable(parser);
     }
 }
 
@@ -120,5 +118,14 @@ ast_T* parser_parse_string(parser_T* parser)
 
     ast->value.string = parser_eat(parser, TOK_STRING)->value;
 
+    return ast;
+}
+
+ast_T* parser_parse_variable(parser_T* parser)
+{
+    ast_T* ast = init_ast(AST_VARIABLE);
+
+    ast->value.variable->name = parser->last_token->value;
+    
     return ast;
 }

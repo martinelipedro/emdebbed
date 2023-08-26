@@ -33,6 +33,12 @@ ast_T* init_ast(int type)
             ast->value.function_call->name = malloc(ID_MAX_SIZE * sizeof(char));
             break;
         }
+        case AST_VARIABLE:
+        {
+            ast->value.variable = malloc(sizeof(ast_variable_T));
+            ast->value.variable->name = malloc(ID_MAX_SIZE * sizeof(char));
+            break;
+        }
     }
 
     return ast;

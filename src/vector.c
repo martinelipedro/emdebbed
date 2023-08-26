@@ -1,4 +1,5 @@
 #include "include/vector.h"
+#include <stdio.h>
 
 vector_T* init_vector(size_t element_size)
 {
@@ -26,4 +27,15 @@ void vector_push(vector_T* vector, void* element)
 
     vector->data = realloc(vector->data, vector->size);
     vector->data[vector->len - 1] = element;
+}
+
+void* vector_get(vector_T* vector, size_t index)
+{
+    if (index > vector->len - 1 || vector->size == 0) 
+    {
+        printf("[err?vector]: requested element %ld, does not exist.", index);
+        exit(1);
+    }
+
+    return vector->data[index];
 }
