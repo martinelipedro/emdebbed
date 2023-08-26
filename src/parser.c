@@ -139,9 +139,7 @@ ast_T* parser_parse_expr(parser_T* parser)
     ast_T* left, *right;
     left = parser_parse_arith_expr(parser);
 
-
     token_T* token = parser->current_token;
-
 
     if (token->type == TOK_SEMICOLON || token->type == TOK_RPAREN)
     {

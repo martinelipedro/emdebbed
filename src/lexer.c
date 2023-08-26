@@ -33,7 +33,7 @@ token_T* lexer_get_next_token(lexer_T* lexer)
         lexer_advance(lexer);
     }
 
-    if (isalpha(lexer->current_char))
+    if (isalpha(lexer->current_char)  || lexer->current_char == '_')
         return lexer_collect_id(lexer);
     
     if (isdigit(lexer->current_char))
@@ -74,7 +74,7 @@ token_T* lexer_collect_id(lexer_T* lexer)
 {
     char* buffer = calloc(1, sizeof(char));
 
-    while (isalpha(lexer->current_char))
+    while (isalnum(lexer->current_char) || lexer->current_char == '_')
     {
         buffer = realloc(buffer, (strlen(buffer) + 2) * sizeof(char));
         strcat(buffer, (char[]){lexer->current_char, 0});
