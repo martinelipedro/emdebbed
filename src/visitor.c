@@ -38,6 +38,7 @@ ast_T* visitor_visit(visitor_T* visitor, ast_T* node)
         case AST_VARIABLE: return visitor_visit_variable(visitor, node);
         case AST_BINARY_EXPR: return visitor_visit_binary_expr(visitor, node);
         case AST_INTEGER: return visitor_visit_integer(visitor, node);
+        case AST_IF_STATEMENT: return visitor_visit_if_stmt(visitor, node);
         case AST_NOOP: return node;
     }
 }
@@ -182,4 +183,16 @@ ast_T* visitor_visit_binary_expr(visitor_T* visitor, ast_T* node)
             break;
         }
     }
+}
+
+ast_T* visitor_visit_if_stmt(visitor_T* visitor, ast_T* node)
+{
+    int result = visitor_visit(visitor, node->value.if_stmt->expr)->value.integer->value;
+
+    if (result)
+    {
+        visitor_visit(visitor, node->value.if_stmt->statements);
+    }
+
+    return node;
 }

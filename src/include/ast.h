@@ -15,6 +15,7 @@ enum ENUM__AST_TYPE
     AST_STRING,
     AST_INTEGER,
     AST_BINARY_EXPR,
+    AST_IF_STATEMENT,
 };
 
 typedef vector_T ast_compound_T;
@@ -52,6 +53,13 @@ typedef struct STRUCT_TYPE__AST_TYPE_BINARY_EXPR
 
 } ast_bin_expr_T;
 
+typedef struct STRUCT_TYPE__AST_TYPE_IF_STATEMENT
+{
+    struct STRUCT_TYPE__AST* expr;
+    struct STRUCT_TYPE__AST* statements;
+
+} ast_if_stmt_T;
+
 typedef struct STRUCT_TYPE__AST
 {
     int type;
@@ -64,6 +72,7 @@ typedef struct STRUCT_TYPE__AST
         ast_variable_T* variable;
         ast_int_T* integer;
         ast_bin_expr_T* binary_expr;
+        ast_if_stmt_T* if_stmt;
 
     } value;
 

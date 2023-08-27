@@ -68,6 +68,7 @@ ast_T* parser_parse_statements(parser_T* parser)
 
     switch (parser->current_token->type)
     {
+        case TOK_IF: return parser_parse_if_statement(parser); break;
         case TOK_ID: return parser_parse_id(parser); break;
         case TOK_STRING: return parser_parse_string(parser); break;
         case TOK_INT: return parser_parse_expr(parser); break;
@@ -140,6 +141,24 @@ ast_T* parser_parse_variable(parser_T* parser)
     ast_T* ast = init_ast(AST_VARIABLE);
 
     ast->value.variable->name = parser->last_token->value;
+
+    return ast;
+}
+
+ast_T* parser_parse_if_statement(parser_T* parser)
+{
+    ast_T* ast = init_ast(AST_IF_STATEMENT);
+
+    parser_eat(parser, TOK_IF);
+    parser_eat(parser, TOK_LPAREN);
+
+    ast->value.if_stmt->expr = parser_parse_expr(parser);
+
+    parser_eat(parser, TOK_RPAREN);
+    parser_eat(parser, TOK_LBRACE);
+
+    ast->value.if_stmt->statements = parser_parse_compound(parser);
+    parser_eat(parser, TOK_RBRACE);
 
     return ast;
 }

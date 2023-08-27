@@ -12,5 +12,6 @@ int main()
     visitor_T* visitor = init_visitor();
     ast_T* root = parser_parse_compound(parser); 
 
+
     visitor_visit(visitor, root);
 }

@@ -63,8 +63,8 @@ token_T* lexer_get_next_token(lexer_T* lexer)
         case '-': lexer_advance(lexer); return init_token(TOK_MINUS, "-");
         case '>': lexer_advance(lexer); return init_token(TOK_GREATER, ">");
         case '<': lexer_advance(lexer); return init_token(TOK_LESSER, "<");
-
-
+        case '{': lexer_advance(lexer); return init_token(TOK_LBRACE, "{");
+        case '}': lexer_advance(lexer); return init_token(TOK_RBRACE, "}");
 
         default: return init_token(TOK_EOF, 0);
     }
@@ -74,11 +74,21 @@ token_T* lexer_retype_id(token_T* token)
 {
     if (strcmp(token->value, "or")  == 0)
     {
-        return init_token(TOK_OR, token->value);
+        token_T* new_token = init_token(TOK_OR, token->value);
+        free(token);
+        return new_token;
     }
     else if (strcmp(token->value, "and") == 0)
     {
-        return init_token(TOK_AND, token->value);
+        token_T* new_token = init_token(TOK_AND, token->value);
+        free(token);
+        return new_token;
+    }
+    else if (strcmp(token->value, "if") == 0)
+    {
+        token_T* new_token = init_token(TOK_IF, token->value);
+        free(token);
+        return new_token;
     }
 
     return token;

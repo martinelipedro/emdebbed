@@ -20,5 +20,6 @@ ast_T* visitor_visit_variable_definition(visitor_T* visitor, ast_T* node);
 ast_T* visitor_visit_variable(visitor_T* visitor, ast_T* node);
 ast_T* visitor_visit_integer(visitor_T* visitor, ast_T* node);
 ast_T* visitor_visit_binary_expr(visitor_T* visitor, ast_T* node);
+ast_T* visitor_visit_if_stmt(visitor_T* visitor, ast_T* node);
 
 #endif

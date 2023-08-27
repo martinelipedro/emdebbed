@@ -52,6 +52,14 @@ ast_T* init_ast(int type)
             ast->value.binary_expr->lhs = (void*)0;
             ast->value.binary_expr->lhs = (void*)0;
             ast->value.binary_expr->operator = -1;
+            break;
+        }
+        case AST_IF_STATEMENT:
+        {
+            ast->value.if_stmt = malloc(sizeof(ast_if_stmt_T));
+            ast->value.if_stmt->expr = (void*)0;
+            ast->value.if_stmt->statements = (void*)0;
+            break;
         }
     }
 
