@@ -19,6 +19,8 @@ enum ENUM__TOKEN_TYPE
     TOK_GREATER,
     TOK_LESSER,
     TOK_EQUALS_EQUALS,
+    TOK_OR,
+    TOK_AND,
 };
 
 typedef struct STRUCT_TYPE__TOKEN

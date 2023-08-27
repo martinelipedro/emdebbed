@@ -1,7 +1,1 @@
-number = 9 * 5;
-other_number = number + 2;
-
-str_var = "Condition: 9 * 5 + 2 > 5";
-
-print(str_var);
-print(other_number > 5);
+print(1 and 0 + 1 * 0 or 1 / 1);

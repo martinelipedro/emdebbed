@@ -4,6 +4,16 @@
 
 #include <string.h>
 
+int h_is_end_expr_tok(int type)
+{
+    if (type == TOK_SEMICOLON || type == TOK_RPAREN)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
 #define ctok printf("%d", parser->current_token->type);
 
 parser_T* init_parser(lexer_T* lexer)
@@ -135,6 +145,36 @@ ast_T* parser_parse_variable(parser_T* parser)
 }
 
 ast_T* parser_parse_expr(parser_T* parser)
+{
+    ast_T* left, *right;
+    left = parser_parse_compare_expr(parser);
+
+    token_T* token = parser->current_token;
+
+    if (h_is_end_expr_tok(token->type))
+    {
+        return left;
+    }
+
+    while (token->type == TOK_OR || token->type == TOK_AND)
+    {
+        parser_advance(parser);
+
+        right = parser_parse_compare_expr(parser);
+        ast_T* new_left = init_ast(AST_BINARY_EXPR);
+        new_left->value.binary_expr->lhs = left;
+        new_left->value.binary_expr->rhs = right;
+        new_left->value.binary_expr->operator = token->type;
+        left = new_left;
+
+        token = parser->current_token;
+        if (h_is_end_expr_tok(token->type)) break;
+    }
+
+    return left;
+}
+
+ast_T* parser_parse_compare_expr(parser_T* parser)
 {
     ast_T* left, *right;
     left = parser_parse_arith_expr(parser);

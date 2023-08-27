@@ -64,6 +64,7 @@ typedef struct STRUCT_TYPE__AST
         ast_variable_T* variable;
         ast_int_T* integer;
         ast_bin_expr_T* binary_expr;
+
     } value;
 
 } ast_T;

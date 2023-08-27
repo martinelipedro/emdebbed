@@ -161,5 +161,25 @@ ast_T* visitor_visit_binary_expr(visitor_T* visitor, ast_T* node)
             return result;
             break;
         }
+        case TOK_OR:
+        {
+            ast_T* result = init_ast(AST_INTEGER);
+            result->value.integer->value = 
+                visitor_visit(visitor, node->value.binary_expr->lhs)->value.integer->value || \
+                visitor_visit(visitor, node->value.binary_expr->rhs)->value.integer->value;
+            
+            return result;
+            break;
+        }
+        case TOK_AND:
+        {
+            ast_T* result = init_ast(AST_INTEGER);
+            result->value.integer->value = 
+                visitor_visit(visitor, node->value.binary_expr->lhs)->value.integer->value && \
+                visitor_visit(visitor, node->value.binary_expr->rhs)->value.integer->value;
+            
+            return result;
+            break;
+        }
     }
 }

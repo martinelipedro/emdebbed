@@ -70,6 +70,20 @@ token_T* lexer_get_next_token(lexer_T* lexer)
     }
 }
 
+token_T* lexer_retype_id(token_T* token)
+{
+    if (strcmp(token->value, "or")  == 0)
+    {
+        return init_token(TOK_OR, token->value);
+    }
+    else if (strcmp(token->value, "and") == 0)
+    {
+        return init_token(TOK_AND, token->value);
+    }
+
+    return token;
+}
+
 token_T* lexer_collect_id(lexer_T* lexer)
 {
     char* buffer = calloc(1, sizeof(char));
@@ -81,7 +95,7 @@ token_T* lexer_collect_id(lexer_T* lexer)
         lexer_advance(lexer);
     }
 
-    return init_token(TOK_ID, buffer);
+    return lexer_retype_id(init_token(TOK_ID, buffer));
 }
 
 token_T* lexer_collect_string(lexer_T* lexer)
