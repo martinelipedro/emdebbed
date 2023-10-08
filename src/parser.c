@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-#define PARSERLOG
+// #define PARSERLOG
 
 
 
@@ -173,8 +173,6 @@ ast_T* parser_parse_variable(parser_T* parser)
     #ifdef PARSERLOG
         printf("Parsing variable\n");
     #endif
-
-    printf("%s", parser->last_token->value);
 
     ast_T* ast = init_ast(AST_VARIABLE);
 

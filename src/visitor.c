@@ -48,7 +48,7 @@ ast_T* visitor_visit(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_compound(visitor_T* visitor, ast_T* node)
 {   
-    #ifndef VISITORLOG
+    #ifdef VISITORLOG
         printf("___Visiting compound\n");
     #endif
 
@@ -64,7 +64,7 @@ ast_T* visitor_visit_compound(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_string(visitor_T* visitor, ast_T* node)
 {
-    #ifndef VISITORLOG
+    #ifdef VISITORLOG
         printf("___Visiting string\n");
     #endif
 
@@ -73,7 +73,7 @@ ast_T* visitor_visit_string(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_function_call(visitor_T* visitor, ast_T* node)
 {
-    #ifndef VISITORLOG
+    #ifdef VISITORLOG
         printf("___Visiting function call\n");
     #endif
 
@@ -87,7 +87,7 @@ ast_T* visitor_visit_function_call(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_variable_definition(visitor_T* visitor, ast_T* node)
 {
-    #ifndef VISITORLOG
+    #ifdef VISITORLOG
         printf("___Visiting variable definition\n");
     #endif
     
@@ -99,7 +99,7 @@ ast_T* visitor_visit_variable_definition(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_variable(visitor_T* visitor, ast_T* node)
 {
-    #ifndef VISITORLOG
+    #ifdef VISITORLOG
         printf("___Visiting variable\n");
     #endif
 
@@ -108,7 +108,7 @@ ast_T* visitor_visit_variable(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_integer(visitor_T* visitor, ast_T* node)
 {
-    #ifndef VISITORLOG
+    #ifdef VISITORLOG
         printf("___Visiting integer\n");
     #endif
 
@@ -117,7 +117,7 @@ ast_T* visitor_visit_integer(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_binary_expr(visitor_T* visitor, ast_T* node)
 {
-    #ifndef VISITORLOG
+    #ifdef VISITORLOG
         printf("___Visiting binexpr\n");
     #endif
 
@@ -218,7 +218,7 @@ ast_T* visitor_visit_binary_expr(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_if_stmt(visitor_T* visitor, ast_T* node)
 {
-    #ifndef VISITORLOG
+    #ifdef VISITORLOG
         printf("___Visiting if\n");
     #endif
     
@@ -234,7 +234,7 @@ ast_T* visitor_visit_if_stmt(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_while_stmt(visitor_T* visitor, ast_T* node)
 {
-    #ifndef VISITORLOG
+    #ifdef VISITORLOG
         printf("___Visiting while\n");
     #endif
 
