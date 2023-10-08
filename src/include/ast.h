@@ -16,6 +16,7 @@ enum ENUM__AST_TYPE
     AST_INTEGER,
     AST_BINARY_EXPR,
     AST_IF_STATEMENT,
+    AST_WHILE_STATEMENT,
 };
 
 typedef vector_T ast_compound_T;
@@ -31,11 +32,13 @@ typedef struct STRUCT_TYPE__AST_TYPE__FUNCTION_CALL
 {
     char* name;
     ast_compound_T* arguments;
+    
 } ast_function_call_T;
 
 typedef struct STRUCT_TYPE__AST_TYPE__VARIABLE
 {
     char* name;
+
 } ast_variable_T;
 
 typedef struct STRUCT_TYPE__AST_TYPE__INTEGER
@@ -60,6 +63,13 @@ typedef struct STRUCT_TYPE__AST_TYPE_IF_STATEMENT
 
 } ast_if_stmt_T;
 
+typedef struct STRUCT_TYPE_AST_TYPE_WHILE_STATEMENT
+{
+    struct STRUCT_TYPE__AST* expr;
+    struct STRUCT_TYPE__AST* statements;
+
+} ast_while_stmt_T;
+
 typedef struct STRUCT_TYPE__AST
 {
     int type;
@@ -73,7 +83,7 @@ typedef struct STRUCT_TYPE__AST
         ast_int_T* integer;
         ast_bin_expr_T* binary_expr;
         ast_if_stmt_T* if_stmt;
-
+        ast_while_stmt_T* while_stmt;
     } value;
 
 } ast_T;

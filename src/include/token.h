@@ -24,6 +24,7 @@ enum ENUM__TOKEN_TYPE
     TOK_IF,
     TOK_LBRACE,
     TOK_RBRACE,
+    TOK_WHILE,
 };
 
 typedef struct STRUCT_TYPE__TOKEN

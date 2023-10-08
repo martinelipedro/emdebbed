@@ -4,6 +4,10 @@
 
 #include <string.h>
 
+#define PARSERLOG
+
+
+
 int h_is_end_expr_tok(int type)
 {
     if (type == TOK_SEMICOLON || type == TOK_RPAREN)
@@ -50,13 +54,20 @@ void parser_advance(parser_T* parser)
 
 ast_T* parser_parse_compound(parser_T* parser)
 {
+    #ifdef PARSERLOG
+        printf("Parsing compound\n");
+    #endif
+
     ast_T* ast = init_ast(AST_COMPOUND);
 
     vector_push(ast->value.compound, (void*)parser_parse_statements(parser));
 
-    while (parser->current_token->type == TOK_SEMICOLON)
+    while (parser->current_token->type == TOK_SEMICOLON || parser->last_token->type == TOK_RBRACE)
     {
-        parser_eat(parser, TOK_SEMICOLON);
+        if (parser->current_token->type == TOK_SEMICOLON)
+        {
+            parser_advance(parser);
+        }
         vector_push(ast->value.compound, (void*)parser_parse_statements(parser));
     }
 
@@ -65,10 +76,14 @@ ast_T* parser_parse_compound(parser_T* parser)
 
 ast_T* parser_parse_statements(parser_T* parser)
 {
+    #ifdef PARSERLOG
+        printf("Parsing statements\n");
+    #endif
 
     switch (parser->current_token->type)
     {
         case TOK_IF: return parser_parse_if_statement(parser); break;
+        case TOK_WHILE: return parser_parse_while_statement(parser); break;
         case TOK_ID: return parser_parse_id(parser); break;
         case TOK_STRING: return parser_parse_string(parser); break;
         case TOK_INT: return parser_parse_expr(parser); break;
@@ -79,6 +94,10 @@ ast_T* parser_parse_statements(parser_T* parser)
 
 ast_T* parser_parse_id(parser_T* parser)
 {
+    #ifdef PARSERLOG
+        printf("Parsing id\n");
+    #endif
+
     parser_advance(parser);
 
     switch (parser->current_token->type)
@@ -91,20 +110,29 @@ ast_T* parser_parse_id(parser_T* parser)
 
 ast_T* parser_parse_variable_definition(parser_T* parser)
 {
+    #ifdef PARSERLOG
+        printf("Parsing var def\n");
+    #endif
+
     ast_T* ast = init_ast(AST_VARIABLE_DEFINITION);
     char* variable_name = parser->last_token->value;
+    
 
     parser_eat(parser, TOK_EQUALS);
 
 
     ast->value.variable_definition->name = variable_name;
-    ast->value.variable_definition->value = parser_parse_statements(parser);
+    ast->value.variable_definition->value = parser_parse_expr(parser);
 
     return ast;
 }
 
 ast_T* parser_parse_function_call(parser_T* parser)
 {
+    #ifdef PARSERLOG
+        printf("Parsing funcall\n");
+    #endif
+
     ast_T* ast = init_ast(AST_FUNCTION_CALL);
     ast->value.function_call->name = parser->last_token->value;
 
@@ -116,11 +144,11 @@ ast_T* parser_parse_function_call(parser_T* parser)
         return ast;
     }
 
-    vector_push(ast->value.function_call->arguments, (void*)parser_parse_statements(parser));
+    vector_push(ast->value.function_call->arguments, parser_parse_expr(parser));
     while (parser->current_token->type == TOK_COMMA)
     {
         parser_eat(parser, TOK_COMMA);
-        vector_push(ast->value.function_call->arguments, (void*)parser_parse_statements(parser));
+        vector_push(ast->value.function_call->arguments, parser_parse_expr(parser));
     }
     parser_eat(parser, TOK_RPAREN);
 
@@ -129,6 +157,10 @@ ast_T* parser_parse_function_call(parser_T* parser)
 
 ast_T* parser_parse_string(parser_T* parser)
 {
+    #ifdef PARSERLOG
+        printf("Parsing string\n");
+    #endif
+
     ast_T* ast = init_ast(AST_STRING);
 
     ast->value.string = parser_eat(parser, TOK_STRING)->value;
@@ -138,6 +170,12 @@ ast_T* parser_parse_string(parser_T* parser)
 
 ast_T* parser_parse_variable(parser_T* parser)
 {
+    #ifdef PARSERLOG
+        printf("Parsing variable\n");
+    #endif
+
+    printf("%s", parser->last_token->value);
+
     ast_T* ast = init_ast(AST_VARIABLE);
 
     ast->value.variable->name = parser->last_token->value;
@@ -147,6 +185,10 @@ ast_T* parser_parse_variable(parser_T* parser)
 
 ast_T* parser_parse_if_statement(parser_T* parser)
 {
+    #ifdef PARSERLOG
+        printf("Parsing if\n");
+    #endif
+
     ast_T* ast = init_ast(AST_IF_STATEMENT);
 
     parser_eat(parser, TOK_IF);
@@ -163,8 +205,34 @@ ast_T* parser_parse_if_statement(parser_T* parser)
     return ast;
 }
 
+ast_T* parser_parse_while_statement(parser_T* parser)
+{
+    #ifdef PARSERLOG
+        printf("Parsing while\n");
+    #endif
+
+    ast_T* ast = init_ast(AST_WHILE_STATEMENT);
+
+    parser_eat(parser, TOK_WHILE);
+    parser_eat(parser, TOK_LPAREN);
+
+    ast->value.while_stmt->expr = parser_parse_expr(parser);
+
+    parser_eat(parser, TOK_RPAREN);
+    parser_eat(parser, TOK_LBRACE);
+
+    ast->value.while_stmt->statements = parser_parse_compound(parser);
+    parser_eat(parser, TOK_RBRACE);
+
+    return ast;
+}
+
 ast_T* parser_parse_expr(parser_T* parser)
 {
+    #ifdef PARSERLOG
+        printf("Parsing expr\n");
+    #endif
+
     ast_T* left, *right;
     left = parser_parse_compare_expr(parser);
 
@@ -230,7 +298,6 @@ ast_T* parser_parse_arith_expr(parser_T* parser)
 
     token_T* token = parser->current_token;
 
-
     if (token->type == TOK_SEMICOLON || token->type == TOK_RPAREN)
     {
         return left;
@@ -248,7 +315,7 @@ ast_T* parser_parse_arith_expr(parser_T* parser)
         left = new_left;
 
         token = parser->current_token;
-        if (token->type == TOK_SEMICOLON || token->type == TOK_RPAREN) break;
+        if (h_is_end_expr_tok(token->type)) break;
     }
 
     return left;
@@ -256,15 +323,10 @@ ast_T* parser_parse_arith_expr(parser_T* parser)
 
 ast_T* parser_parse_term(parser_T* parser)
 {
-
-
     ast_T* left, *right;
     left = parser_parse_factor(parser);
 
-
-
     token_T* token = parser->current_token;
-
 
     if (token->type == TOK_SEMICOLON || token->type == TOK_RPAREN)
     {
@@ -293,8 +355,6 @@ ast_T* parser_parse_factor(parser_T* parser)
 {
     token_T* token = parser->current_token;
 
-
-
     switch (token->type)
     {
         case TOK_INT:
@@ -305,8 +365,13 @@ ast_T* parser_parse_factor(parser_T* parser)
             parser_eat(parser, TOK_INT);
             return ast;
         }
+        case TOK_STRING:
+        {
+            return parser_parse_string(parser);
+        }
         default:
         {
+            parser_advance(parser);
             return parser_parse_variable(parser);
         }
     }

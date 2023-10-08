@@ -61,6 +61,13 @@ ast_T* init_ast(int type)
             ast->value.if_stmt->statements = (void*)0;
             break;
         }
+        case AST_WHILE_STATEMENT:
+        {
+            ast->value.while_stmt = malloc(sizeof(ast_if_stmt_T));
+            ast->value.while_stmt->expr = (void*)0;
+            ast->value.while_stmt->statements = (void*)0;
+            break;
+        }
     }
 
     return ast;

@@ -90,6 +90,12 @@ token_T* lexer_retype_id(token_T* token)
         free(token);
         return new_token;
     }
+    else if (strcmp(token->value, "while") == 0)
+    {
+        token_T* new_token = init_token(TOK_WHILE, token->value);
+        free(token);
+        return new_token;
+    }
 
     return token;
 }

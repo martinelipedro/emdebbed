@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "include/token.h"
 
+#define a
+
 void builtin_print(visitor_T* visitor, ast_compound_T* arguments)
 {
     for (int i = 0; i < arguments->len; ++i)
@@ -39,12 +41,19 @@ ast_T* visitor_visit(visitor_T* visitor, ast_T* node)
         case AST_BINARY_EXPR: return visitor_visit_binary_expr(visitor, node);
         case AST_INTEGER: return visitor_visit_integer(visitor, node);
         case AST_IF_STATEMENT: return visitor_visit_if_stmt(visitor, node);
+        case AST_WHILE_STATEMENT: return visitor_visit_while_stmt(visitor, node);
         case AST_NOOP: return node;
     }
 }
 
 ast_T* visitor_visit_compound(visitor_T* visitor, ast_T* node)
-{
+{   
+    #ifndef VISITORLOG
+        printf("___Visiting compound\n");
+    #endif
+
+
+
     for (size_t i = 0; i < node->value.compound->len; ++i)
     {
         visitor_visit(visitor, node->value.compound->data[i]);
@@ -55,12 +64,18 @@ ast_T* visitor_visit_compound(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_string(visitor_T* visitor, ast_T* node)
 {
+    #ifndef VISITORLOG
+        printf("___Visiting string\n");
+    #endif
+
     return node;
 }
 
 ast_T* visitor_visit_function_call(visitor_T* visitor, ast_T* node)
 {
-
+    #ifndef VISITORLOG
+        printf("___Visiting function call\n");
+    #endif
 
     if (strcmp(node->value.function_call->name, "print") == 0)
     {
@@ -72,6 +87,10 @@ ast_T* visitor_visit_function_call(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_variable_definition(visitor_T* visitor, ast_T* node)
 {
+    #ifndef VISITORLOG
+        printf("___Visiting variable definition\n");
+    #endif
+    
     context_set_variable(
         visitor->global_context, node->value.variable_definition->name,
         visitor_visit(visitor, node->value.variable_definition->value)
@@ -80,16 +99,28 @@ ast_T* visitor_visit_variable_definition(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_variable(visitor_T* visitor, ast_T* node)
 {
+    #ifndef VISITORLOG
+        printf("___Visiting variable\n");
+    #endif
+
     return visitor_visit(visitor, context_get_variable(visitor->global_context, node->value.variable->name));
 }
 
 ast_T* visitor_visit_integer(visitor_T* visitor, ast_T* node)
 {
+    #ifndef VISITORLOG
+        printf("___Visiting integer\n");
+    #endif
+
     return node;
 }
 
 ast_T* visitor_visit_binary_expr(visitor_T* visitor, ast_T* node)
 {
+    #ifndef VISITORLOG
+        printf("___Visiting binexpr\n");
+    #endif
+
     switch (node->value.binary_expr->operator)
     {
         case TOK_PLUS:
@@ -187,6 +218,10 @@ ast_T* visitor_visit_binary_expr(visitor_T* visitor, ast_T* node)
 
 ast_T* visitor_visit_if_stmt(visitor_T* visitor, ast_T* node)
 {
+    #ifndef VISITORLOG
+        printf("___Visiting if\n");
+    #endif
+    
     int result = visitor_visit(visitor, node->value.if_stmt->expr)->value.integer->value;
 
     if (result)
@@ -195,4 +230,20 @@ ast_T* visitor_visit_if_stmt(visitor_T* visitor, ast_T* node)
     }
 
     return node;
+}
+
+ast_T* visitor_visit_while_stmt(visitor_T* visitor, ast_T* node)
+{
+    #ifndef VISITORLOG
+        printf("___Visiting while\n");
+    #endif
+
+    int result = visitor_visit(visitor, node->value.while_stmt->expr)->value.integer->value;
+
+    while (1)
+    {
+        result = visitor_visit(visitor, node->value.while_stmt->expr)->value.integer->value;
+        if (!result) break;
+        visitor_visit(visitor, node->value.while_stmt->statements);
+    }
 }
