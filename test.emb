@@ -1,12 +1,4 @@
-x = 1;
-
-if (x > 0 and x == 1)
+func test(value)
 {
-    i = 10;
-    while (i > 0)
-    {
-        print("true");
-        i = i - 1;
-    };
+    print("test");
 };
-

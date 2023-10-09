@@ -82,6 +82,7 @@ ast_T* parser_parse_statements(parser_T* parser)
     {
         case TOK_IF: return parser_parse_if_statement(parser); break;
         case TOK_WHILE: return parser_parse_while_statement(parser); break;
+        case TOK_FUNC: return parser_parse_function_definition(parser); break;
         case TOK_ID: return parser_parse_id(parser); break;
         case TOK_STRING: return parser_parse_string(parser); break;
         case TOK_INT: return parser_parse_expr(parser); break;
@@ -218,6 +219,33 @@ ast_T* parser_parse_while_statement(parser_T* parser)
     parser_eat(parser, TOK_LBRACE);
 
     ast->value.while_stmt->statements = parser_parse_compound(parser);
+    parser_eat(parser, TOK_RBRACE);
+
+    return ast;
+}
+
+ast_T* parser_parse_function_definition(parser_T* parser)
+{
+    ast_T* ast = init_ast(AST_FUNCTION_DEFINITION);
+
+    parser_eat(parser, TOK_FUNC);
+    ast->value.function_definition->name = parser_eat(parser, TOK_ID)->value;
+    parser_eat(parser, TOK_LPAREN);
+
+
+    if (parser->current_token->type != TOK_RPAREN)
+    {
+        vector_push(ast->value.function_definition->arguments, parser_eat(parser, TOK_ID)->value);
+        while (parser->current_token->type == TOK_COMMA)
+        {
+            parser_eat(parser, TOK_COMMA);
+            vector_push(ast->value.function_call->arguments, parser_eat(parser, TOK_ID)->value);
+        }
+    }
+    parser_eat(parser, TOK_RPAREN);
+
+    parser_eat(parser, TOK_LBRACE);
+    ast->value.function_definition->body = parser_parse_compound(parser);
     parser_eat(parser, TOK_RBRACE);
 
     return ast;

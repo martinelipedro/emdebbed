@@ -68,6 +68,15 @@ ast_T* init_ast(int type)
             ast->value.while_stmt->statements = (void*)0;
             break;
         }
+        case AST_FUNCTION_DEFINITION:
+        {
+            ast->value.function_definition = malloc(sizeof(ast_funcdef_T));
+            ast->value.function_definition->body = (void*)0;
+            ast->value.function_definition->name = calloc(ID_MAX_SIZE, sizeof(char));
+            ast->value.function_definition->return_value = (void*)0;
+            ast->value.function_definition->arguments = init_vector(ID_MAX_SIZE * sizeof(char));
+            break; 
+        } 
     }
 
     return ast;

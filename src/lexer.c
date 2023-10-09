@@ -96,6 +96,30 @@ token_T* lexer_retype_id(token_T* token)
         free(token);
         return new_token;
     }
+    else if (strcmp(token->value, "true") == 0)
+    {
+        token_T* new_token = init_token(TOK_INT, "1");
+        free(token);
+        return new_token;
+    }
+    else if (strcmp(token->value, "false") == 0)
+    {
+        token_T* new_token = init_token(TOK_INT, "0");
+        free(token);
+        return new_token;
+    }
+    else if (strcmp(token->value, "func") == 0)
+    {
+        token_T* new_token = init_token(TOK_FUNC, "func");
+        free(token);
+        return new_token;
+    }
+    else if (strcmp(token->value, "return") == 0)
+    {
+        token_T* new_token = init_token(TOK_RETURN, "return");
+        free(token);
+        return new_token;
+    }
 
     return token;
 }

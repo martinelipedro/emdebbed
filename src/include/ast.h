@@ -18,6 +18,7 @@ enum ENUM__AST_TYPE
     AST_UNARY_EXPR,
     AST_IF_STATEMENT,
     AST_WHILE_STATEMENT,
+    AST_FUNCTION_DEFINITION,
 };
 
 typedef vector_T ast_compound_T;
@@ -77,6 +78,15 @@ typedef struct STRUCT_TYPE_AST_TYPE_WHILE_STATEMENT
 
 } ast_while_stmt_T;
 
+typedef struct STRUCT_TYPE__AST_TYPE_FUNCTION_DEFINITION
+{
+    char* name;
+    vector_T* arguments;
+    struct STRUCT_TYPE__AST*  body;
+    struct STRUCT_TYPE__AST* return_value;
+
+} ast_funcdef_T;
+
 typedef struct STRUCT_TYPE__AST
 {
     int type;
@@ -92,6 +102,7 @@ typedef struct STRUCT_TYPE__AST
         ast_if_stmt_T* if_stmt;
         ast_while_stmt_T* while_stmt;
         ast_un_expr_T* unary_expr;
+        ast_funcdef_T* function_definition;
     } value;
 
 } ast_T;

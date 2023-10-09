@@ -5,6 +5,7 @@ context_T* init_context()
     context_T* context = malloc(sizeof(context_T));
 
     context->variables = init_map(sizeof(ast_T*));
+    context->functions = init_map(sizeof(ast_T*));
 
     return context;
 }

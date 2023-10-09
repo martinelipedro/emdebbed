@@ -12,7 +12,7 @@ int main()
     visitor_T* visitor = init_visitor();
     ast_T* root = parser_parse_compound(parser); 
 
-    // printf("%d", to_ast(root->value.compound->data[0])->type);
+    printf("%d", to_ast(to_ast(root->value.compound->data[0])->value.function_definition->body->value.compound->data[0])->type);
 
     visitor_visit(visitor, root);
     
