@@ -6,8 +6,6 @@
 
 // #define PARSERLOG
 
-
-
 int h_is_end_expr_tok(int type)
 {
     if (type == TOK_SEMICOLON || type == TOK_RPAREN)

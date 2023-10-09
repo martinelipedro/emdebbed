@@ -15,6 +15,7 @@ enum ENUM__AST_TYPE
     AST_STRING,
     AST_INTEGER,
     AST_BINARY_EXPR,
+    AST_UNARY_EXPR,
     AST_IF_STATEMENT,
     AST_WHILE_STATEMENT,
 };
@@ -56,6 +57,12 @@ typedef struct STRUCT_TYPE__AST_TYPE_BINARY_EXPR
 
 } ast_bin_expr_T;
 
+typedef struct STRUCT_TYPE__AST_TYPE_UNARY_EXPR
+{
+    int operator;
+    struct STRUCT_TYPE__AST *lhs;
+} ast_un_expr_T;
+
 typedef struct STRUCT_TYPE__AST_TYPE_IF_STATEMENT
 {
     struct STRUCT_TYPE__AST* expr;
@@ -84,6 +91,7 @@ typedef struct STRUCT_TYPE__AST
         ast_bin_expr_T* binary_expr;
         ast_if_stmt_T* if_stmt;
         ast_while_stmt_T* while_stmt;
+        ast_un_expr_T* unary_expr;
     } value;
 
 } ast_T;
