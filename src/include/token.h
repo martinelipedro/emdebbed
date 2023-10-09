@@ -27,6 +27,7 @@ enum ENUM__TOKEN_TYPE
     TOK_WHILE,
     TOK_FUNC,
     TOK_RETURN,
+    TOK_ELSE,
 };
 
 typedef struct STRUCT_TYPE__TOKEN

@@ -68,6 +68,7 @@ typedef struct STRUCT_TYPE__AST_TYPE_IF_STATEMENT
 {
     struct STRUCT_TYPE__AST* expr;
     struct STRUCT_TYPE__AST* statements;
+    struct STRUCT_TYPE__AST* else_statements;
 
 } ast_if_stmt_T;
 

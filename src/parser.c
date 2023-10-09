@@ -66,6 +66,7 @@ ast_T* parser_parse_compound(parser_T* parser)
         {
             parser_advance(parser);
         }
+        if (parser->last_token->type == TOK_RBRACE) break;
         vector_push(ast->value.compound, (void*)parser_parse_statements(parser));
     }
 
@@ -198,6 +199,14 @@ ast_T* parser_parse_if_statement(parser_T* parser)
 
     ast->value.if_stmt->statements = parser_parse_compound(parser);
     parser_eat(parser, TOK_RBRACE);
+
+    if (parser->current_token->type == TOK_ELSE)
+    {
+        parser_eat(parser, TOK_ELSE);
+        parser_eat(parser, TOK_LBRACE);
+        ast->value.if_stmt->else_statements = parser_parse_compound(parser);
+        parser_eat(parser, TOK_RBRACE);
+    }
 
     return ast;
 }

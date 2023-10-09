@@ -15,3 +15,11 @@ if (x > 5)
     test();
 };
 
+if (x == 12)
+{
+    print("true");
+}
+else
+{
+    print("else cond");
+};

@@ -16,7 +16,6 @@ typedef struct STRUCT_TYPE__VECTOR
 vector_T* init_vector(size_t element_size);
 
 void vector_push(vector_T* vector, void* element);
-void vector_pop(vector_T* vector);
 void* vector_get(vector_T* vector, size_t index);
 
 #endif

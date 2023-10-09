@@ -239,6 +239,13 @@ ast_T* visitor_visit_if_stmt(visitor_T* visitor, ast_T* node)
     {
         visitor_visit(visitor, node->value.if_stmt->statements);
     }
+    else
+    {
+        if (node->value.if_stmt->else_statements)
+        {
+            visitor_visit(visitor, node->value.if_stmt->else_statements);
+        }
+    }
 
     return node;
 }

@@ -120,6 +120,12 @@ token_T* lexer_retype_id(token_T* token)
         free(token);
         return new_token;
     }
+    else if (strcmp(token->value, "else") == 0)
+    {
+        token_T* new_token = init_token(TOK_RETURN, "else");
+        free(token);
+        return new_token;
+    }
 
     return token;
 }
