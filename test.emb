@@ -1,4 +1,17 @@
-func test(value)
+x = 4 + 4 * 2;
+
+func test()
 {
-    print("test");
+    print("Value of X: ");
+    print(x);
+    print(true and false);
+    print(true or false);
+    print(true + true);
+    print(5 == 8 - 3);
 };
+
+if (x > 5)
+{
+    test();
+};
+

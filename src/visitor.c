@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "include/token.h"
 
-#define a
+// #define VISITORLOG
 
 void builtin_print(visitor_T* visitor, ast_compound_T* arguments)
 {
@@ -42,6 +42,7 @@ ast_T* visitor_visit(visitor_T* visitor, ast_T* node)
         case AST_INTEGER: return visitor_visit_integer(visitor, node);
         case AST_IF_STATEMENT: return visitor_visit_if_stmt(visitor, node);
         case AST_WHILE_STATEMENT: return visitor_visit_while_stmt(visitor, node);
+        case AST_FUNCTION_DEFINITION: return visitor_visit_function_definition(visitor, node);
         case AST_NOOP: return node;
     }
 }
@@ -77,9 +78,19 @@ ast_T* visitor_visit_function_call(visitor_T* visitor, ast_T* node)
         printf("___Visiting function call\n");
     #endif
 
-    if (strcmp(node->value.function_call->name, "print") == 0)
+    char* function_name = node->value.function_call->name;
+
+    if (strcmp(function_name, "print") == 0)
     {
         builtin_print(visitor, node->value.function_call->arguments);
+    }
+    else
+    {
+        if (context_function_exists(visitor->global_context, function_name))
+        {
+            ast_T* function = (ast_T*)map_get(visitor->global_context->functions, function_name);
+            visitor_visit(visitor, function->value.function_definition->body);
+        }
     }
     
     return node;
@@ -246,4 +257,13 @@ ast_T* visitor_visit_while_stmt(visitor_T* visitor, ast_T* node)
         if (!result) break;
         visitor_visit(visitor, node->value.while_stmt->statements);
     }
+}
+
+ast_T* visitor_visit_function_definition(visitor_T* visitor, ast_T* node)
+{
+    #ifdef VISITORLOG
+        printf("___Visiting function definition\n");
+    #endif
+    context_set_function(visitor->global_context, node);
+    return node;
 }

@@ -82,7 +82,7 @@ typedef struct STRUCT_TYPE__AST_TYPE_FUNCTION_DEFINITION
 {
     char* name;
     vector_T* arguments;
-    struct STRUCT_TYPE__AST*  body;
+    struct STRUCT_TYPE__AST* body;
     struct STRUCT_TYPE__AST* return_value;
 
 } ast_funcdef_T;

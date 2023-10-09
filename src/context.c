@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "include/context.h"
 
 context_T* init_context()
@@ -19,6 +20,22 @@ void context_set_variable(context_T* context, char* name, ast_T* value)
     }
 
     map_add(context->variables, name, value);
+}
+
+void context_set_function(context_T* context, ast_T* func)
+{
+    if (context_variable_exists(context, func->value.function_definition->name))
+    {
+        printf("Error, function already exists. Exiting");
+        exit(1);
+    }
+
+    map_add(context->functions, func->value.function_definition->name, func);
+}
+
+int context_function_exists(context_T* context, char* name)
+{
+    return map_key_exists(context->functions, name);
 }
 
 int context_variable_exists(context_T* context, char* name)
